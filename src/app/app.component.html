@@ -1,0 +1,103 @@
+<div class="container mt-3">
+  <div class="d-flex justify-content-end">
+    <div>
+      <input
+        #inputName
+        type="text"
+        [(ngModel)]="newUser.name"
+        placeholder="Name"
+        class="me-1"
+      />
+      <input
+        #inputTeam
+        type="text"
+        [(ngModel)]="newUser.email"
+        placeholder="Team"
+        class="me-1"
+      />
+    </div>
+
+    <button type="button" class="btn btn-success btn-sm" (click)="addUser()">
+      Add User
+    </button>
+  </div>
+
+  <table class="table table-bordered mt-3" *ngIf="users.length">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users; let i = index">
+        <td style="width: 50px">{{ i + 1 }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td style="width: 150px">
+          <div>
+            <button
+              type="button"
+              (click)="clickEdit(user.id)"
+              data-bs-toggle="modal"
+              data-bs-target="#editModal"
+              class="btn btn-primary btn-sm me-2"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              (click)="delete(user.id)"
+              class="btn btn-danger btn-sm"
+            >
+              Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="modal" id="editModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Edit User</h4>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="editUser.name"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="editUser.email"
+            />
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-dismiss="modal"
+            (click)="update()"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
