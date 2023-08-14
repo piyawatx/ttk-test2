@@ -9,9 +9,10 @@ import { UserService } from './services/user.service';
 export class AppComponent {
   constructor(private service: UserService) {}
   ngOnInit() {
+    this.checkLogin();
     this.getUsers();
   }
-  users: any;
+  users: any = [];
   newUser: any = {
     name: '',
     email: '',
@@ -21,8 +22,55 @@ export class AppComponent {
     name: '',
     email: '',
   };
+  login: any = {
+    username: '',
+    password: '',
+  };
   isLogin = false;
+  username = '';
 
+  checkLogin() {
+    let token = localStorage.getItem('token');
+    this.username = localStorage.getItem('username') || '';
+    console.log(token);
+
+    this.service.authen({ token: token }).subscribe((res) => {
+      const newObj: any = res;
+
+      if (newObj.status == 'ok') {
+        this.isLogin = true;
+      } else {
+        this.isLogin = false;
+      }
+      console.log('isLogin ', this.isLogin);
+    });
+  }
+  clickLogin() {
+    localStorage.setItem('username', this.login.username);
+    // localStorage.setItem('password', this.login.username);
+    let data = {
+      username: this.login.username,
+      password: this.login.password,
+    };
+
+    this.service.login(data).subscribe((res) => {
+      const newObj: any = res;
+      if (newObj.status == 'ok') {
+        // login สำเร็จ เก็บ token
+        localStorage.setItem('token', newObj.token);
+        this.isLogin = true;
+        this.username = this.login.username;
+        console.log(this.username);
+      }else{
+        alert('username or password is invalid')
+      }
+    });
+  }
+  logout() {
+    localStorage.clear();
+    this.isLogin = false;
+    console.log('logout');
+  }
   getUsers() {
     this.service.getUsers().subscribe((res) => {
       this.users = res;

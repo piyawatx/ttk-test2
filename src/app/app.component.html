@@ -1,65 +1,105 @@
 <div class="container mt-3">
-  <div class="d-flex justify-content-end">
-    <div>
-      <input
-        #inputName
-        type="text"
-        [(ngModel)]="newUser.name"
-        placeholder="Name"
-        class="me-1"
-      />
-      <input
-        #inputTeam
-        type="text"
-        [(ngModel)]="newUser.email"
-        placeholder="Team"
-        class="me-1"
-      />
+  <!-- Login -->
+  <div class="d-flex justify-content-center" *ngIf="!isLogin">
+    <div class="shadow rounded p-3 mb-3" style="width: 400px">
+      <!-- <h3 class="text-center">Login</h3> -->
+      <div class="mb-3 mt-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Username"
+          [(ngModel)]="login.username"
+        />
+      </div>
+      <div class="mb-3">
+        <input
+          type="password"
+          class="form-control"
+          placeholder="Password"
+          [(ngModel)]="login.password"
+        />
+      </div>
+      <button
+        type="button"
+        class="btn btn-primary btn-sm"
+        (click)="clickLogin()"
+      >
+        Login
+      </button>
     </div>
-
-    <button type="button" class="btn btn-success btn-sm" (click)="addUser()">
-      Add User
-    </button>
   </div>
 
-  <table class="table table-bordered mt-3" *ngIf="users.length">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of users; let i = index">
-        <td style="width: 50px">{{ i + 1 }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.email }}</td>
-        <td style="width: 150px">
-          <div>
-            <button
-              type="button"
-              (click)="clickEdit(user.id)"
-              data-bs-toggle="modal"
-              data-bs-target="#editModal"
-              class="btn btn-primary btn-sm me-2"
-            >
-              Edit
-            </button>
-            <button
-              type="button"
-              (click)="delete(user.id)"
-              class="btn btn-danger btn-sm"
-            >
-              Delete
-            </button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Content -->
+  <div class="shadow p-3 rounded" *ngIf="isLogin">
+    <div class="d-flex justify-content-between mb-3">
+      <div class="d-flex">
+        <div>
+          <input
+            type="text"
+            [(ngModel)]="newUser.name"
+            placeholder="Name"
+            class="me-1"
+          />
+          <input
+            type="text"
+            [(ngModel)]="newUser.email"
+            placeholder="Email"
+            class="me-1"
+          />
+        </div>
 
+        <button
+          type="button"
+          class="btn btn-success btn-sm"
+          (click)="addUser()"
+        >
+          Add User
+        </button>
+      </div>
+      <div class="d-flex">
+        <div class="me-3">{{username}}</div><button class="btn btn-secondary btn-sm"  (click)="logout()">Logout</button>
+      </div>
+    </div>
+    <table class="table table-bordered" *ngIf="users.length">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users; let i = index">
+          <td style="width: 50px">{{ i + 1 }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td style="width: 150px">
+            <div>
+              <button
+                type="button"
+                (click)="clickEdit(user.id)"
+                data-bs-toggle="modal"
+                data-bs-target="#editModal"
+                class="btn btn-primary btn-sm me-2"
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                (click)="delete(user.id)"
+                class="btn btn-danger btn-sm"
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
   <div class="modal" id="editModal">
     <div class="modal-dialog">
       <div class="modal-content">

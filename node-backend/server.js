@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const users = require("./db");
 const bodyParser = require("body-parser");
 
 app.use(cors());
@@ -12,28 +11,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
-// app.get("/users", (req, res) => {
-//   res.json(users);
-// });
-
-// app.get("/users/:id", (req, res) => {
-//   res.json(users.find((user) => user.id === req.params.id));
-// });
-
-// app.post("/users", (req, res) => {
-//   console.log('backend ',req.body);
-//   users.push(req.body);
-//   res.status(201).json(req.body);
-// });
-// app.put("/users/:id", (req, res) => {
-//   const updateIndex = users.findIndex((user) => user.id === req.params.id);
-//   res.json(Object.assign(users[updateIndex], req.body));
-// });
-// app.delete("/users/:id", (req, res) => {
-//   const deletedIndex = users.findIndex((user) => user.id === req.params.id);
-//   users.splice(deletedIndex, 1);
-//   res.status(204).send();
-// });
 
 const mysql = require("mysql");
 var con = mysql.createConnection({
@@ -50,7 +27,6 @@ con.connect(function (err) {
   app.get("/users", (req, res) => {
     con.query("SELECT * FROM users", function (err, result, fields) {
       if (err) throw err;
-      // console.log(result);
       res.json(result);
     });
   });
@@ -75,7 +51,6 @@ con.connect(function (err) {
       if (err) {
         throw err;
       } else {
-        console.log("1 record inserted");
         res.status(201).json(req.body);
       }
     });
@@ -89,7 +64,6 @@ con.connect(function (err) {
       if (err) {
         throw err;
       } else {
-        console.log("Updated ", user);
         res.status(200).json(req.body);
       }
     });
@@ -107,6 +81,14 @@ con.connect(function (err) {
       }
     });
   });
+});
+
+app.post("/register", (req, res) => {
+  try {
+    const { username, password } = req.body;
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.listen(3000, () => {

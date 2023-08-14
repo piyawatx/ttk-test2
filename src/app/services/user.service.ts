@@ -22,7 +22,7 @@ export class UserService {
   }
 
   update(user: any) {
-    console.log('update ', user);
+    // console.log('update ', user);
 
     const headers = { 'content-type': 'application/json' };
     const body = JSON.stringify(user);
@@ -31,5 +31,20 @@ export class UserService {
 
   delete(id: number) {
     return this.httpClient.delete(this.url + '/' + id);
+  }
+
+  login(data: any) {
+    const headers = { 'content-type': 'application/json' };
+    const body = JSON.stringify(data);
+    return this.httpClient.post('http://localhost:3000/login', body, {
+      headers: headers,
+    });
+  }
+  authen(data: any) {
+    const headers = { 'content-type': 'application/json' };
+    const body = JSON.stringify(data);
+    return this.httpClient.post('http://localhost:3000/authen', body, {
+      headers: headers,
+    });
   }
 }
